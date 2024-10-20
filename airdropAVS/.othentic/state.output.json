@@ -1,0 +1,17 @@
+{
+  "L1": {
+    "L1MessageHandler": "0x39A056f5B7E9f70942680E3D8471a7B840E66dbA",
+    "L1Vault": "0xf30C653917137fe6Bc711Ee7B5f94DbdF5677fCA",
+    "AvsGovernance": "0x7436f7ACa27Ad2a7799A53C3E49f03d604dFCF07",
+    "ERC20": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE"
+  },
+  "L2": {
+    "OBLS": "0x36584cd36b04B01aE9953284029aA377b5480216",
+    "L2MessageHandler": "0x6488Cf4e0Ffb8019832480E247516A3aEdaD4Ee8",
+    "AttestationCenter": "0x7990946d9e00eb349d5F63312CE288c11071B7F4",
+    "L2Vault": "0x67aC9d73F9c32a1F1E6F46544305bbB4E7064dCF",
+    "ERC20": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+    "l2Rewards": false
+  },
+  "timestamp": "2024-10-20T21:39:27.784Z"
+}
