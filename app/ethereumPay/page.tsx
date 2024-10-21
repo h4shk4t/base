@@ -17,7 +17,7 @@ export default function GitHubCheck() {
     setIsLoading(true);
     // Simulate eligibility check (replace with actual API call)
     console.log(ethAdd);
-    const res = await fetch('http://localhost:5001/api/pay-eth', {
+    const res = await fetch('http://localhost:5000/api/airdrop', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
