@@ -1,24 +1,26 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Basedrop
 
-## Getting Started
+Introducing an automated incentivization platform for blockchain networks that optimizes rewards based on user activity and streamlines the entire process. In our application, for instance, users can create an airdrop event, specify criteria (currently, only GitHub activity is analyzed), and the platform automatically generates a list of eligible participants. 
 
-First, run the development server:
+This runs on an Eigenlayer AVS (Actively Validated Service) powered by Othentic, ensuring that user selection is done fairly and through a decentralized process.
 
+The L2 contracts of the AVS (`AttestationCenter` Contracts) are deployed on the ***Base Sepolia Testnet***; Contract Address - 0x7990946d9e00eb349d5F63312CE288c11071B7F4
+
+The L1 contracts of the AVS (`AvsGovernance` Contract) are deployed on the ***Holesky Testnet***; Contract Address - 0x7436f7ACa27Ad2a7799A53C3E49f03d604dFCF07
+
+## Implementation
+
+### AVS Architecture overview
+<img src="Architecture.png" width="500" />
+
+## Setup
+After creating necessary operators and deployer, you need to create their respective accounts. Run the following command to deploy the contracts to the respective chains mentioned above.
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+othentic-cli network deploy \                 
+    --l1-initial-deposit 1000000000000000000 \
+    --l2-initial-deposit 150000000000000000 \
+    --l2-chain base-sepolia --name basedrop --eth
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
 ## Learn More
 
