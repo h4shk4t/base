@@ -7,17 +7,20 @@ from hashlib import sha256
 
 import os
 import requests
+import logging
 
 # Load environment variables
 load_dotenv()
+
+logger = logging.getLogger(__name__)
 
 # Create flask app
 app = Flask(__name__)
 
 # Read the private key from the environment variable
 private_key = os.environ.get("PRIVATE_KEY")
-rpc_base_address = "http://0.0.0.0:8545"
-validation_service_address = "http://0.0.0.0:4002"
+rpc_base_address = "http://10.8.0.69:8545"
+validation_service_address = "http://10.8.0.42:4002"
 
 def generate_PoT(data1):
     """
@@ -28,12 +31,12 @@ def generate_PoT(data1):
     proof_of_task = sha256(data).hexdigest()
     return proof_of_task
 
-def generate_response(fileID, model_name):
-    execution_url = "http://0.0.0.0:4003"
+def generate_response(username):
+    execution_url = "http://10.8.0.43:4003"
     json_rpc_body = {
         "jsonrpc": "2.0",
         "method": "generate_response",
-        "params": [fileID, model_name],
+        "params": [username],
         "id": 1
     }
     try:
@@ -41,17 +44,18 @@ def generate_response(fileID, model_name):
         response.raise_for_status()
         json_response = response.json()
         response = json_response["result"]
+        print(f"Generated response: {response}")
         return response
     except requests.exceptions.RequestException as e:
         print(f"Error: {e}")
         raise e
 
-def send_task(proof_of_task, data task_definition_id):
+def send_task(proof_of_task, data, task_definition_id):
+    print("Reached here")
     account = Account.from_key(private_key)
     performer_address = account.address
     data = Web3.to_hex(text=data)
     proof_of_task = str(proof_of_task)
-    # proof_of_task = "2ac9b7acde3df183fe73cf1d571847b6829dca593fb2687d47939aa1c1788b63"
     task_definition_id = 0
 
     from eth_abi import encode
@@ -75,29 +79,30 @@ def send_task(proof_of_task, data task_definition_id):
         ],
         "id": 1
     }
-    print("Sending task:", json_rpc_body)
+    logger.info("Sending task: %s", json_rpc_body)
     try:
         response = requests.post(rpc_base_address, json=json_rpc_body)
         response.raise_for_status()
         result = response.json()
-        print("API response:", result)
+        logger.info("API response: %s", result)
     except requests.exceptions.RequestException as error:
-        print(f"Error making API request: {error}")
+        logger.error("Error making API request: %s", error)
 
-@app.route("/initiateTask", methods=["POST"]):
+@app.route("/initiateTask", methods=["POST"])
 def initiate_task():
     try:
         data = request.get_json()
-        network = data.get('network')
-        if not network:
-            return jsonify({"error": "Missing network"}), 400
+        username = data.get('username')
+        if not username:
+            return jsonify({"error": "Missing username"}), 400
 
-        response = generate_response(network)
+        response = generate_response(username)
         proof_of_task = generate_PoT(response)
         send_task(proof_of_task, response, 1)
         return jsonify({"response": response}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+# Task performer can be called directly by API or by smart contract
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5002)

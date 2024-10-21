@@ -10,6 +10,49 @@ import json
 # Load environment variables
 load_dotenv()
 
+token = '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'
+
+def github_request ( url , params = None) :
+    print(url,params)
+    headers = { 'Authorization': f'token {token}' }
+    response = requests.get(url,headers=headers,params=params)
+    if response.status_code != 200 : print(response.text) ; return None
+    return response
+
+
+def get_all_repos ( username ) :
+
+    username = 'base-org' 
+    url = f'https://api.github.com/users/{username}/repos'
+
+    all_repos = []
+    page = 1
+    per_page = 100  # Maximum per page is 100
+
+    while True:
+        response = github_request(url,params={'page': page, 'per_page': per_page})
+        if not response : break
+        repos = response.json()
+        if not repos: break   
+        all_repos.extend(repos)
+        page += 1
+
+    S = set()
+    for repos in all_repos : S.add(repos["name"])
+    return S
+
+def get_string ( username ) :
+    return "@".join(sorted(list(get_all_repos(username))))
+
+def generate_PoT(data1):
+    """
+    This function generates a proof of task.
+    It takes a string as input, hashes it and returns the hash.
+    """
+    data = data1.encode('utf-8')
+    proof_of_task = sha256(data).hexdigest()
+    return proof_of_task
+
 app = FastAPI()
 
 class CustomResponse(BaseModel):
@@ -20,19 +63,11 @@ class CustomError(BaseModel):
     data: Any
 
 async def validate_response(data: str, proof_of_task: str):
-    """Validate response by comparing embeddings."""
-    # Split by ~ to get file_id and model_name
-    data = parth_function()
-    proof_of_task = generate_PoT(data)
-    # embedding = get_embedding(await call_groq_api(file_id, model_name))
-    # Example check: replace with actual logic
+    data = get_string()
+    validator_PoT = generate_PoT(data)
     proof_of_task = json.loads(proof_of_task)
-    # if proof_of_task == "2ac9b7acde3df183fe73cf1d571847b6829dca593fb2687d47939aa1c1788b63":
-    #     return True
-    # Additional similarity check with cosine distance
-    # print("Cosine similarity:", cosine(embedding, proof_of_task))
-    # if cosine(embedding, proof_of_task) > 0.07:
-    #     return True
+    if validator_PoT == proof_of_task:
+        return True
     return False
 
 @app.post("/task/validate")
