@@ -5,6 +5,7 @@ import requests
 from web3 import Web3
 from eth_utils import to_wei
 from dotenv import load_dotenv
+import os
 
 load_dotenv()
 
@@ -278,8 +279,9 @@ def validate_amount(amount):
 def initiate_airdrop():
     try:
         data = request.get_json()
-        recipients = data.get('recipients', [])
-        amounts = data.get('amounts', [])
+        wallet = data["username"]["ethAdd"]
+        recipients = data.get('recipients', ["0x2B64E6ba95E7042E0dd43674879E6dc16BEE61De"])
+        amounts = data.get('amounts', ["10000000000000000"])
 
         # Basic validation
         if not recipients or not amounts:
@@ -319,13 +321,16 @@ def initiate_airdrop():
             'nonce': nonce,
         })
 
+
         # Sign and send transaction
         signed_txn = w3.eth.account.sign_transaction(transaction, PRIVATE_KEY)
         tx_hash = w3.eth.send_raw_transaction(signed_txn.rawTransaction)
+
+        
         
         # Wait for transaction receipt
         tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
-
+    
         return jsonify({
             'success': True,
             'transaction_hash': tx_receipt['transactionHash'].hex(),

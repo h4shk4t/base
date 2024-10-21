@@ -10,7 +10,7 @@ export default function Component() {
   const [isSliding, setIsSliding] = useState(false);
   const router = useRouter();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     setIsSliding(true); // Trigger animation
     setTimeout(() => {
@@ -25,7 +25,7 @@ export default function Component() {
       <div className={`min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-blue-600 to-purple-600 p-4 
         ${isSliding ? 'slide-out' : ''}`}>
         <div className="w-full max-w-md mx-auto bg-gray-900/60 backdrop-blur-md shadow-2xl border border-gray-700 rounded-xl transition-all duration-300 hover:shadow-purple-500/20">
-          <div className="text-2xl font-bold text-center text-gray-100 p-6">Create Profile</div>
+          <div className="text-2xl font-bold text-center text-gray-100 p-6">Create Airdrop Event</div>
           <form onSubmit={handleSubmit}>
             <div className="p-6 space-y-4">
               <input

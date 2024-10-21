@@ -4,7 +4,7 @@ import './Sidebar.css';
 function Sidebar() {
   return (
     <div className="sidebar">
-      <h2>OpenBlock Labs</h2>
+      <h2>BaseDrop</h2>
       <ul>
         <li className="active">Dashboard</li>
         <li>Data Models</li>

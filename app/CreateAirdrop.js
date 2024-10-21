@@ -12,7 +12,7 @@ export default function Component() {
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-blue-600 to-purple-600 p-4">
       <div className="w-full max-w-md mx-auto bg-gray-900/60 backdrop-blur-md shadow-2xl border border-gray-700 rounded-xl transition-all duration-300 hover:shadow-purple-500/20 p-6">
-        <h2 className="text-2xl font-bold text-center text-gray-100 mb-6">Create Profile</h2>
+        <h2 className="text-2xl font-bold text-center text-gray-100 mb-6">Create Airdrop Event</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <input

@@ -5,7 +5,7 @@ async function main() {
     const balance = await deployer.getBalance();
     console.log("Account balance:", balance.toString());
   
-    const Contract = await ethers.getContractFactory("YourContractName");
+    const Contract = await ethers.getContractFactory("Airdrop");
     const contract = await Contract.deploy();
     console.log("Contract deployed to:", contract.address);
   }
