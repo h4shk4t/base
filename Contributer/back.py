@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import json
 import requests
 
@@ -182,6 +183,7 @@ def get_eligible_map (user) :
     return Eligible
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*" }})
 
 @app.route('/')
 def home():
@@ -195,14 +197,15 @@ def process_data():
 
     Eligible = -1
 
-    S = get_all_repos(username)
-    L = "@".join(sorted(list(S)))
-    print(L)
-    print(len(L))
+    # S = get_all_repos(username)
+    # L = "@".join(sorted(list(S)))
+    # print(L)
+    # print(len(L))
 
     filename = 'data.json'
     with open(filename, 'r') as json_file:
         data = json.load(json_file)
+        # print(data)
         if "name" in data and data["name"] == username :
             Eligible = data["eligible"]
     
