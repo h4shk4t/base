@@ -10,7 +10,7 @@ services:
     <<: *othentic-cli
     command: ["node", "aggregator", "--json-rpc"]
     environment:
-      - PRIVATE_KEY=${PRIVATE_KEY_AGGREGATOR:-${PRIVATE_KEY:-}}
+      - PRIVATE_KEY=${PRIVATE_KEY_AGGREGATOR:-495f8ce0cec433ba12459445a2eb5c8653459621d8d1a2aca86993aeb155de22}
     ports:
       - "8545:8545"
       - "9876:9876"
@@ -27,7 +27,7 @@ services:
       "http://10.8.0.42",
     ]
     environment:
-      - PRIVATE_KEY=${PRIVATE_KEY_ATTESTER1:-80d892ccf26e4a408b65c4ebd471e2e6f0999f4b863f45d3766f974530390dc3}
+      - PRIVATE_KEY=${PRIVATE_KEY_ATTESTER1:-495f8ce0cec433ba12459445a2eb5c8653459621d8d1a2aca86993aeb155de22}
       - TASK_PERFORMER=0x0000000000000000000000000000000000000000
     depends_on:
       aggregator:
@@ -45,7 +45,7 @@ services:
       "http://10.8.0.42",
     ]
     environment:
-      - PRIVATE_KEY=${PRIVATE_KEY_ATTESTER1:-${PRIVATE_KEY_VALIDATOR1:-}}
+      - PRIVATE_KEY=${PRIVATE_KEY_ATTESTER1:-411f50fb317d5633512077040cd11135854a6946d4b7e43a5d541116256e2e76}
       - TASK_PERFORMER=0x0000000000000000000000000000000000000000
     depends_on:
       aggregator:
@@ -63,7 +63,7 @@ services:
       "http://10.8.0.42",
     ]
     environment:
-      - PRIVATE_KEY=${PRIVATE_KEY_ATTESTER3:-${PRIVATE_KEY_VALIDATOR3:-}}
+      - PRIVATE_KEY=${PRIVATE_KEY_ATTESTER3:-9ccde5c7f98eff2182640f1bfcc4f0cf10cb3d8eec034398743b4b26581432f4}
       - TASK_PERFORMER=0x0000000000000000000000000000000000000000
     depends_on:
       aggregator:
@@ -103,12 +103,14 @@ services:
         dockerfile: ./Dockerfile
     environment:
       - OTHENTIC_CLIENT_RPC_ADDRESS=http://10.8.0.69:8545
-      - PRIVATE_KEY=${PRIVATE_KEY_PERFORMER:-${PRIVATE_KEY:-}}
+      - PRIVATE_KEY=${PRIVATE_KEY_PERFORMER:-495f8ce0cec433ba12459445a2eb5c8653459621d8d1a2aca86993aeb155de22}
     env_file:
       - .env
     depends_on:
       execution-service:
         condition: service_started
+    ports:
+      - "5002:5002"
     networks:
       p2p:
         ipv4_address: 10.8.0.44
