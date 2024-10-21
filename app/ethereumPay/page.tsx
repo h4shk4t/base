@@ -10,7 +10,7 @@ const CLIENT_ID = "Ov23liiPa49iL2IoWe3H";
 export default function GitHubCheck() {
   const [ethAdd, setethAdd] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [paid, setpaid] = useState<boolean | null>(null); // null means not checked yet
+  const [success, setsuccess] = useState<boolean | null>(null); // null means not checked yet
   const router = useRouter();
 
   const checkEligibility = async () => {
@@ -26,7 +26,7 @@ export default function GitHubCheck() {
     });
     const data = await res.json();
     
-    setpaid(data.paid);
+    setsuccess(data.success);
     setIsLoading(false);
   };
 
@@ -59,9 +59,9 @@ export default function GitHubCheck() {
             </button>
           </form>
           
-          {paid !== null && (
-            <div className={`mt-4 text-center text-lg ${paid ? 'text-green-400' : 'text-red-400'}`}>
-              {paid ? 'You are paid!'  : 'Sorry, you are not paid.'}
+          {success !== null && (
+            <div className={`mt-4 text-center text-lg ${success ? 'text-green-400' : 'text-red-400'}`}>
+              {success ? 'You are paid!'  : 'Sorry, you are not paid.'}
             </div>
           )}
         </div>
