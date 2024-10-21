@@ -11,11 +11,13 @@ The L1 contracts of the AVS (`AvsGovernance` Contract) are deployed on the ***Ho
 The distribution contract (`Airdrop` Contract) responsible for taking in the list of eligible user addresses and distributing the airdrop is deployed on the ***Base Sepolia Testnet***; Contract Address - 0x3D56c673576f89fdea21Ddc27C2ef4E44b56aDF2
 
 ## Implementation
-
+The algorithm implemnted for identifying eligible users starts with users who have significant contributions in relevant repositories and then expands the search through their network of followers, creating a broader pool of users related to the initial repository's contributors. This allows for identifying both direct and indirectly relevant contributors in the GitHub ecosystem.
+This algorithm runs on multiple nodes of the Eigenlayer AVS which is attested by multiple validators.
 ### AVS Architecture overview
 <img src="Architecture.png" width="500" />
 
-## Setup
+After the submission of the proof of task, the airdrop is distributed via a distribution contract written on top of Openzeppelin contracts.
+## Setup for AVS contracts
 After creating necessary operators and deployer, you need to create their respective accounts. Run the following command to deploy the contracts to the respective chains mentioned above.
 ```bash
 othentic-cli network deploy \                 
