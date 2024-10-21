@@ -1,6 +1,8 @@
+"use client"
 import { Check, Minus } from 'lucide-react'
 import Navbar from "../component/Navbar";
 import Footer from "../component/Footer";
+import { useState } from 'react';
 
 type User = {
   id: number
@@ -11,15 +13,72 @@ type User = {
   performance: number
 }
 
-const users: User[] = [
-  { id: 1, name: 'Alice Johnson', role: 'Developer', projects: 5, tasks: 23, performance: 92 },
-  { id: 2, name: 'Bob Smith', role: 'Designer', projects: 3, tasks: 15, performance: 88 },
-  { id: 3, name: 'Carol Williams', role: 'Project Manager', projects: 8, tasks: 42, performance: 95 },
-  { id: 4, name: 'David Brown', role: 'Developer', projects: 6, tasks: 31, performance: 90 },
-  { id: 5, name: 'Eva Martinez', role: 'Designer', projects: 4, tasks: 19, performance: 87 },
-]
-
 export default function UserList() {
+
+  const [responseData, setResponseData] = useState(null);
+  const [error, setError] = useState(null);
+
+  const handlePostRequest = async () => {
+    try {
+      const res = await fetch('http://localhost:5000/api/contributors', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username: 'base-org' }),
+      });
+
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+
+      const data = await res.json();
+      setResponseData(data);
+    } catch (err:any) {
+      setError(err.message);
+    }
+  };
+
+  handlePostRequest();
+  let sortedProducts ;  
+  if ( responseData ){
+    const entries = Object.entries(responseData);
+    entries.sort((a, b) => b[1] - a[1]);
+    sortedProducts = Object.fromEntries(entries);
+    console.log(sortedProducts);
+   
+  } else { sortedProducts = responseData ; }
+  const userRows = [];
+  let i = -1 ;
+  for (let key in sortedProducts ) {
+    i += 1;
+    userRows.push(
+      <tr
+        key={i} 
+        className={i % 2 === 0 ? 'bg-gray-800/50' : 'bg-gray-900/50'}
+      >
+        <td className="px-4 py-4">
+          <div className="flex items-center space-x-3">
+            <span className="font-medium text-gray-200">{key}</span>
+          </div>
+        </td>
+        <td className="px-4 py-4 text-center text-gray-300">{"Developer"}</td>
+        <td className="px-4 py-4 text-center text-gray-300">{"base-org"}</td>
+        <td className="px-4 py-4 text-center text-gray-300">{responseData[key]}</td>
+        <td className="px-4 py-4 text-center text-gray-300">
+          {responseData[key] >= 100 ? (
+            <Check className="inline-block w-5 h-5 text-green-500" />
+          ) : responseData[key] >= 10 ? (
+            <Check className="inline-block w-5 h-5 text-yellow-500" />
+          ) : (
+            <Minus className="inline-block w-5 h-5 text-red-500" />
+          )}
+          <span className="ml-2">{responseData[key]/73}</span>
+        </td>
+      </tr>
+    );
+  }
+
   return (
     <div>
       <Navbar />
@@ -42,37 +101,20 @@ export default function UserList() {
                 </tr>
               </thead>
               <tbody>
-                {users.map((user, index) => (
-                  <tr key={user.id} className={index % 2 === 0 ? 'bg-gray-800/50' : 'bg-gray-900/50'}>
-                    <td className="px-4 py-4">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-400 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                          {user.name.charAt(0)}
-                        </div>
-                        <span className="font-medium text-gray-200">{user.name}</span>
-                      </div>
-                    </td>
-                    <td className="px-4 py-4 text-center text-gray-300">{user.role}</td>
-                    <td className="px-4 py-4 text-center text-gray-300">{user.projects}</td>
-                    <td className="px-4 py-4 text-center text-gray-300">{user.tasks}</td>
-                    <td className="px-4 py-4 text-center text-gray-300">
-                      {user.performance >= 90 ? (
-                        <Check className="inline-block w-5 h-5 text-green-500" />
-                      ) : user.performance >= 80 ? (
-                        <Check className="inline-block w-5 h-5 text-yellow-500" />
-                      ) : (
-                        <Minus className="inline-block w-5 h-5 text-red-500" />
-                      )}
-                      <span className="ml-2">{user.performance}%</span>
+                {userRows.length > 0 ? userRows : (
+                  <tr>
+                    <td colSpan="5" className="text-center text-gray-300 py-4">
+                      No team members available.
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
-        </div>
+        </div>  
       </div>
       <Footer />
     </div>
-  )
+  );
+
 }
