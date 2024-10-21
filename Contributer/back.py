@@ -217,5 +217,34 @@ def process_data():
     
     return jsonify(Eligible)
 
+@app.route('/api/check-eligibility', methods=['POST'])
+def check_eligible():
+    data = request.get_json()
+    username = str(data["username"]["githubUsername"])
+    print(username)
+
+    Eligible = -1
+
+    # S = get_all_repos(username)
+    # L = "@".join(sorted(list(S)))
+    # print(L)
+    # print(len(L))
+
+    filename = 'data.json'
+    with open(filename, 'r') as json_file:
+        data = json.load(json_file)
+        if "name" in data :
+            Eligible = data["eligible"]
+    
+    if Eligible == -1 :    
+        Eligible = get_eligible_map(username)
+        data = { "name":username , "eligible":Eligible }
+        with open(filename, 'w') as json_file:
+            json.dump(data, json_file, indent=4)
+    
+    Status = { "eligible" : True }
+    if Eligible == -1 or username not in Eligible : Status["eligible"] = False
+    return jsonify(Status)
+
 if __name__ == '__main__':
     app.run(debug=True) 

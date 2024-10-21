@@ -14,8 +14,15 @@ export default function GitHubCheck() {
   const checkEligibility = async () => {
     setIsLoading(true);
     // Simulate eligibility check (replace with actual API call)
-    const response = await fetch(`/api/check-github-eligibility?username=${githubUsername}`);
-    const data = await response.json();
+    console.log(githubUsername);
+    const res = await fetch('http://localhost:5000/api/check-eligibility', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username: {githubUsername} }),
+    });
+    const data = await res.json();
     
     setEligible(data.eligible);
     setIsLoading(false);
